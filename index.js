@@ -1,7 +1,9 @@
-const { error } = require('console');
-const fs = require('fs');
+// const { error } = require('console');
+// const fs = require('fs');
+const http = require('http');
+const url = require('url');
 
-import { unlink } from 'node:fs';
+// import { unlink } from 'node:fs';
 
 
 // // Blocking - Synchronous way
@@ -25,8 +27,34 @@ import { unlink } from 'node:fs';
 //     });
 // }); 
 
-console.log('Reading file...');
+// console.log('Reading file...');
 
-unlink('./txt/final.txt', err => {
-    console.log('deleted');
+// unlink('./txt/final.txt', err => {
+//     console.log('deleted');
+// });
+
+///////////////////////////
+// SERVER
+
+const server = http.createServer((req, res) => {
+    const pathName = req.url;
+
+    if (pathName === '/' || pathName === '/overview') {
+        res.end('This is the overview');
+    } else if (pathName === '/product') {
+        res.end('This is the product');
+    } else {
+        res.writeHead(404, {
+            "content-type": 'text/html',
+            'my-own-header': 'hello-worlds'
+        });
+        res.end('<h1>page could not be found</h1>')
+
+    }
 });
+
+
+server.listen(8000, '127.0.0.1', () => {
+    console.log('listening 8000');
+});
+
